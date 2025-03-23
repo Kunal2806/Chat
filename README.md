@@ -9,3 +9,12 @@ The data will be deleated as the user disconnect from the Server.
 # Backend Structure ( Excalidraw )
 ![image](https://github.com/user-attachments/assets/1dc20605-ecce-4794-9c54-75a30d576d63)
 
+# Backend 
+
+- intialize a Node.js project 
+    npm init -y
+
+- add typescript and ws
+    npm install typescript 
+    npx tsc --init
+    npm i ws @types/ws
