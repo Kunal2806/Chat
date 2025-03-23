@@ -1,4 +1,4 @@
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 const wss = new WebSocketServer({port: 8080});
 console.log("server started...")
 
@@ -12,21 +12,41 @@ interface Message {
     payload: Payload
 }
 
-wss.on("connection", (socket) => {
+const userData = new Map<string, number[]>();
 
-    socket.send("login");
-    
-    socket.on("message",function(message: Message){
+wss.on("connection", (socket: WebSocket) => {
 
-    const parsedMessage = JSON.parse(message as unknown as string);
-        
-        if(parsedMessage.type == "join") {
-            socket.send(`Mr. ${parsedMessage.payload.name} you can join room: ${parsedMessage.payload.text} ...`);
+    socket.on("message",function(message: string){
+       
+        const parsedMessage: Message= JSON.parse(message);
+
+        if(parsedMessage.type == "join" && typeof parsedMessage.payload.text == 'number') {
+
+            if(userData.get(parsedMessage.payload.name)) {
+
+                userData.get(parsedMessage.payload.name)?.find(u=>u==parsedMessage.payload.text)?
+                socket.send("room already exist") :
+                userData.get(parsedMessage.payload.name)?.push(parsedMessage.payload.text);
+                socket.send(JSON.stringify(userData.get(parsedMessage.payload.name)));
+            }
+            else{
+                userData.set(parsedMessage.payload.name, [parsedMessage.payload.text]);
+                socket.send(JSON.stringify(userData.get(parsedMessage.payload.name)));
+            } 
         }
 
         else if(parsedMessage.type == "chat") {
-           socket.send(`Mr. ${parsedMessage.payload.name} your message is ${parsedMessage.payload.text}`)
+            socket.send(`Mr. ${parsedMessage.payload.name} your message is ${parsedMessage.payload.text}`)
         }
-
+        
+        else {
+            socket.send("Credentials are not valid")
+        }
     })
+
+    socket.on('close',(message: string)=>{
+        const parsedMessage: Message = JSON.parse(message);
+        userData.delete(parsedMessage.payload.name);
+    })
+    
 })
