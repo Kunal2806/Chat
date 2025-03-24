@@ -1,6 +1,6 @@
 # Chat 
 A Chat Website which does not store any type of data.
-<br/>
+
 The data will be deleated as the user disconnect from the Server.
 
 # Frontend Design ( Figma )
@@ -14,7 +14,13 @@ The data will be deleated as the user disconnect from the Server.
 - intialize a Node.js project 
     npm init -y
 
-- add typescript and ws
+- add typescript and ws 
     npm install typescript 
-    npx tsc --init
+    npx tsc --init 
     npm i ws @types/ws
+
+# Frontend
+- npm create vite@latest
+    framework: React
+    variant: TypeScript
+- npm install tailwindcss @tailwindcss/vite
