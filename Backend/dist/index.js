@@ -2,28 +2,34 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ws_1 = require("ws");
 const wss = new ws_1.WebSocketServer({ port: 8080 });
-console.log("server started...");
+console.log("Server Start...");
 const userData = new Map();
-wss.on("connection", (socket) => {
-    socket.on("message", function (message) {
+wss.on("connection", function (socket) {
+    socket.on("message", (event) => {
         var _a, _b;
-        const parsedMessage = JSON.parse(message);
-        if (parsedMessage.type == "join" && typeof parsedMessage.payload.text == 'number') {
-            if (userData.get(parsedMessage.payload.name)) {
-                ((_a = userData.get(parsedMessage.payload.name)) === null || _a === void 0 ? void 0 : _a.find(u => u == parsedMessage.payload.text)) ?
-                    socket.send("room already exist") :
-                    (_b = userData.get(parsedMessage.payload.name)) === null || _b === void 0 ? void 0 : _b.push(parsedMessage.payload.text);
-            }
-            else {
-                userData.set(parsedMessage.payload.name, [parsedMessage.payload.text]);
-            }
-            socket.send(JSON.stringify(userData.get(parsedMessage.payload.name)));
+        const { type, payload: { roomId, name, text } } = JSON.parse(event);
+        let room = [];
+        if (type == "join") {
+            ((_a = userData.get(socket)) === null || _a === void 0 ? void 0 : _a.includes(roomId)) ?
+                socket.send("Room already Exists!") :
+                room = userData.get(socket) || [];
+            userData.set(socket, [...room, roomId]);
+            socket.send(JSON.stringify(userData.get(socket)));
         }
-        else if (parsedMessage.type == "chat") {
-            socket.send(`Mr. ${parsedMessage.payload.name} your message is ${parsedMessage.payload.text}`);
+        else if (type == "chat" && typeof text == 'string' && typeof name == 'string') {
+            ((_b = userData.get(socket)) === null || _b === void 0 ? void 0 : _b.includes(roomId)) &&
+                wss.clients.forEach((client) => {
+                    var _a;
+                    if ((_a = userData.get(client)) === null || _a === void 0 ? void 0 : _a.includes(roomId)) {
+                        client.send(JSON.stringify({ name: name, text: text }));
+                    }
+                });
         }
         else {
-            socket.send("Credentials are not valid");
+            socket.send("Wrong Credentials!");
         }
+    });
+    socket.on('close', (socket) => {
+        userData.delete(socket);
     });
 });

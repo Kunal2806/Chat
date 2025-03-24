@@ -1,52 +1,52 @@
 import { WebSocketServer, WebSocket } from "ws";
+
 const wss = new WebSocketServer({port: 8080});
-console.log("server started...")
+console.log("Server Start...");
 
-type Payload = {
-    name: string; 
-    text: string | number;
-}
-
-interface Message {
+interface MessageType {
     type: string;
-    payload: Payload
+    payload: {
+        roomId: number;
+        name?: string;
+        text?: string;
+    }
 }
 
-const userData = new Map<string, number[]>();
+const userData = new Map<WebSocket, number[]>();
 
-wss.on("connection", (socket: WebSocket) => {
+wss.on("connection",function(socket: WebSocket) {
 
-    socket.on("message",function(message: string){
-       
-        const parsedMessage: Message= JSON.parse(message);
+    socket.on("message", (event: string)=> {
 
-        if(parsedMessage.type == "join" && typeof parsedMessage.payload.text == 'number') {
+        const { type, payload: { roomId, name, text} }: MessageType = JSON.parse(event);
+        let room: number[]= [];
 
-            if(userData.get(parsedMessage.payload.name)) {
-
-                userData.get(parsedMessage.payload.name)?.find(u=>u==parsedMessage.payload.text)?
-                socket.send("room already exist") :
-                userData.get(parsedMessage.payload.name)?.push(parsedMessage.payload.text);
-                socket.send(JSON.stringify(userData.get(parsedMessage.payload.name)));
-            }
-            else{
-                userData.set(parsedMessage.payload.name, [parsedMessage.payload.text]);
-                socket.send(JSON.stringify(userData.get(parsedMessage.payload.name)));
-            } 
+        if(type == "join") {
+            userData.get(socket)?.includes(roomId)?
+            socket.send("Room already Exists!"):
+            room = userData.get(socket) || [];
+            userData.set(socket, [...room,roomId]);
+            socket.send(JSON.stringify(userData.get(socket)));
         }
 
-        else if(parsedMessage.type == "chat") {
-            socket.send(`Mr. ${parsedMessage.payload.name} your message is ${parsedMessage.payload.text}`)
+        else if(type == "chat" && typeof text=='string' && typeof name=='string') {
+            userData.get(socket)?.includes(roomId) &&
+            wss.clients.forEach((client: WebSocket)=> {
+                if(userData.get(client)?.includes(roomId)) {
+                    client.send(JSON.stringify({name: name, text: text}));
+                }
+            })
         }
-        
+
         else {
-            socket.send("Credentials are not valid")
+            socket.send("Wrong Credentials!")
         }
+
     })
 
-    socket.on('close',(message: string)=>{
-        const parsedMessage: Message = JSON.parse(message);
-        userData.delete(parsedMessage.payload.name);
+    socket.on('close',(socket: WebSocket)=> {
+        userData.delete(socket);
     })
-    
+
 })
+
