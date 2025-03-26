@@ -1,9 +1,10 @@
+import Loading from "./components/Loading"
 
 
 function App() {
   return (
     <>
-      <h1>working...</h1>
+      <Loading />
     </>
   )
 }
