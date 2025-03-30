@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Loading from "./components/Loading"
 import Register from "./components/Register";
@@ -33,11 +33,17 @@ function App() {
   }, [])
   return (
     <div className="cursor-default">
-      {
-        roomOpt == "" ? 
-        loading ? <Loading />:<Register setRoomOpt={setRoomOpt}/> :
-        <RoomJoin roomOpt={roomOpt}/>
-      }
+      <BrowserRouter>
+        <Routes>
+          {
+            loading?
+            <Route path="/" element={<Loading/>} /> :
+            <Route path="/" element={<Register setRoomOpt={setRoomOpt}/>} /> 
+          }
+          <Route path="/roomjoin" element={<RoomJoin roomOpt={roomOpt}/>} />
+    
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }

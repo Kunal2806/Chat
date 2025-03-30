@@ -1,12 +1,15 @@
+import { useNavigate } from "react-router-dom";
 
 type registerPrompt = {
     setRoomOpt: (roomOpt : string) => void;
 }
 
 function Register({setRoomOpt}: registerPrompt) {
-    
+    const Navigate = useNavigate();
+
     const handleRoom = (roomOpt: string ) =>{
         setRoomOpt(roomOpt);
+        Navigate("/roomjoin")
     }
   return (
     <>
