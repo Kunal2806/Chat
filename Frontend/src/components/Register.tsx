@@ -1,6 +1,13 @@
 
+type registerPrompt = {
+    setRoomOpt: (roomOpt : string) => void;
+}
 
-function Register() {
+function Register({setRoomOpt}: registerPrompt) {
+    
+    const handleRoom = (roomOpt: string ) =>{
+        setRoomOpt(roomOpt);
+    }
   return (
     <>
         <div className="flex flex-col items-center bg-[#3C496C] h-[100vh] text-white">
@@ -13,11 +20,15 @@ function Register() {
                     <p className="font-Russo_One ">Your data will be <br/> automatically removed <br/> whenever you disconnect.</p>
                 </div>
                 <div className="flex flex-col justify-center items-center space-y-8 h-[90%] w-[33%] border border-white rounded-2xl text-[40px] font-Russo_One">
-                    <div className="border rounded-2xl pl-15 pr-15 pt-1 bg-[#E5EBF4] text-[#3C496C] cursor-pointer hover:bg-[#3C496C] hover:text-white">Join Room</div>
-                    <div className="border rounded-2xl pl-9 pr-9 pt-1 cursor-pointer hover:bg-[#E5EBF4] hover:text-[#3C496C] ">Create Room</div>
+                    <div className="border rounded-2xl pl-15 pr-15 pt-1 cursor-pointer hover:bg-[#E5EBF4] hover:text-[#3C496C] " onClick={()=>{
+                        handleRoom("Join")
+                    }}>Join Room</div>
+                    <div className="border rounded-2xl pl-9 pr-9 pt-1 cursor-pointer hover:bg-[#E5EBF4] hover:text-[#3C496C] " onClick={()=>{
+                        handleRoom("Create")
+                    }}>Create Room</div>
                 </div>
             </div>
-        </div>
+        </div>  
     </>
   )
 }
