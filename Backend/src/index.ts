@@ -17,10 +17,8 @@ const userData = new Map<WebSocket, number[]>();
 wss.on("connection",function(socket: WebSocket) {
 
     socket.on("message", (event: string)=> {
-
         const { type, payload: { roomId, name, text} }: MessageType = JSON.parse(event);
         let room: number[]= [];
-
         if(type == "join") {
             userData.get(socket)?.includes(roomId)?
             socket.send("Room already Exists!"):

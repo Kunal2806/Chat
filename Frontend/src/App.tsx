@@ -15,11 +15,11 @@ function App() {
   useEffect(() => {
     
     const ws = new WebSocket('ws://localhost:8080/')
+    
     ws.onopen = () => {
       setLoading(false);
+      wsRef.current = ws;
     }
-    wsRef.current = ws;
-      
     
     ws.onclose = () => {
       setLoading(true);
@@ -40,7 +40,7 @@ function App() {
             <Route path="/" element={<Loading/>} /> :
             <Route path="/" element={<Register setRoomOpt={setRoomOpt}/>} /> 
           }
-          <Route path="/roomjoin" element={<RoomJoin roomOpt={roomOpt}/>} />
+          <Route path="/roomjoin" element={<RoomJoin roomOpt={roomOpt} wsRef={wsRef.current}/>} />
     
         </Routes>
       </BrowserRouter>
