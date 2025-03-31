@@ -12,7 +12,9 @@ function App() {
   const [loading, setLoading] = useState(true);
   const wsRef = useRef<WebSocket | null>(null);
   const [roomOpt, setRoomOpt] = useState<string>("");
-  const [Room, setRoom] = useState<string []>([])
+  const [Room, setRoom] = useState<number []>([]);
+  const [name, setName] = useState<string>("");
+
   useEffect(() => {
     
     const ws = new WebSocket('ws://localhost:8080/')
@@ -41,8 +43,8 @@ function App() {
             <Route path="/" element={<Loading/>} /> :
             <Route path="/" element={<Register setRoomOpt={setRoomOpt}/>} /> 
           }
-          <Route path="/roomjoin" element={<RoomJoin roomOpt={roomOpt} wsRef={wsRef.current} setRoom={setRoom}/>} />
-          <Route path="/chat" element={<Chat Room={Room}/>} />
+          <Route path="/roomjoin" element={<RoomJoin roomOpt={roomOpt} wsRef={wsRef.current} setRoom={setRoom} _setName={setName}/>} />
+          <Route path="/chat" element={<Chat Room={Room} _name={name} />} />
         </Routes>
       </BrowserRouter>
     </div>

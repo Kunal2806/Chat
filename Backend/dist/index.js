@@ -21,7 +21,12 @@ wss.on("connection", function (socket) {
                 wss.clients.forEach((client) => {
                     var _a;
                     if ((_a = userData.get(client)) === null || _a === void 0 ? void 0 : _a.includes(roomId)) {
-                        client.send(JSON.stringify({ name: name, text: text }));
+                        if (client == socket) {
+                            socket.send(JSON.stringify({ my: true, roomId: roomId, text: text }));
+                        }
+                        else {
+                            client.send(JSON.stringify({ name: name, roomId: roomId, text: text }));
+                        }
                     }
                 });
         }

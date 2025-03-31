@@ -5,14 +5,15 @@ import { useState, useEffect} from "react";
 interface roomOptProp {
     roomOpt : string;
     wsRef: WebSocket | null;
-    setRoom: (Room :string []) => void;
+    setRoom: (Room :number []) => void;
+    _setName :(Name: string) => void;
 }
 
 
-function RoomJoin({roomOpt,wsRef,setRoom}: roomOptProp) {
+function RoomJoin({roomOpt,wsRef,setRoom, _setName}: roomOptProp) {
     const navigate = useNavigate();
 
-    const [name, setName] = useState<string | null>(null)
+    const [name, setName] = useState<string>("")
     const [roomId, setRoomId] = useState<number | null>(null)
 
     useEffect(() => {
@@ -41,7 +42,7 @@ function RoomJoin({roomOpt,wsRef,setRoom}: roomOptProp) {
                 }
                 else {
                     const roomarray = JSON.parse(e.data)
-                    console.log(JSON.parse(e.data))
+                    _setName(name);
                     setRoom(roomarray);
                     navigate('/chat');
                 }

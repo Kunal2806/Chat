@@ -31,7 +31,12 @@ wss.on("connection",function(socket: WebSocket) {
             userData.get(socket)?.includes(roomId) &&
             wss.clients.forEach((client: WebSocket)=> {
                 if(userData.get(client)?.includes(roomId)) {
-                    client.send(JSON.stringify({name: name, text: text}));
+                    if(client == socket) {
+                        socket.send(JSON.stringify({my: true, roomId: roomId, text: text}));
+                    }
+                    else{
+                        client.send(JSON.stringify({name: name, roomId: roomId, text: text}));
+                    }
                 }
             })
         }
