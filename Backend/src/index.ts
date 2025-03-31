@@ -20,9 +20,9 @@ wss.on("connection",function(socket: WebSocket) {
         const { type, payload: { roomId, name, text} }: MessageType = JSON.parse(event);
         let room: number[]= [];
         if(type == "join") {
+            room = userData.get(socket) || [];
             userData.get(socket)?.includes(roomId)?
             socket.send("Room already Exists!"):
-            room = userData.get(socket) || [];
             userData.set(socket, [...room,roomId]);
             socket.send(JSON.stringify(userData.get(socket)));
         }

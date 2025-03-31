@@ -10,10 +10,10 @@ wss.on("connection", function (socket) {
         const { type, payload: { roomId, name, text } } = JSON.parse(event);
         let room = [];
         if (type == "join") {
+            room = userData.get(socket) || [];
             ((_a = userData.get(socket)) === null || _a === void 0 ? void 0 : _a.includes(roomId)) ?
                 socket.send("Room already Exists!") :
-                room = userData.get(socket) || [];
-            userData.set(socket, [...room, roomId]);
+                userData.set(socket, [...room, roomId]);
             socket.send(JSON.stringify(userData.get(socket)));
         }
         else if (type == "chat" && typeof text == 'string' && typeof name == 'string') {
