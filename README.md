@@ -24,3 +24,6 @@ The data will be deleated as the user disconnect from the Server.
     framework: React
     variant: TypeScript
 - npm install tailwindcss @tailwindcss/vite
+
+# Demo
+<video controls src="./images/TempChat.mp4" title="Title"></video>
