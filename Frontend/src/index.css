@@ -3,7 +3,7 @@
 @import "tailwindcss";
 
 
-:root {
+@theme {
     --font-Rubik_Vinyl: "Rubik Vinyl";
     --font-Russo_One: "Russo One";
 }
