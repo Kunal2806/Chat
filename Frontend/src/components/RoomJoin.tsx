@@ -26,7 +26,6 @@ function RoomJoin({roomOpt,wsRef,setRoom, _setName}: roomOptProp) {
     const handleSubmit = () => {
         
         if(wsRef && name != null && roomId!=null) {
-            console.log(name + roomId);
             wsRef.send(
                 JSON.stringify({
                     type: "join",

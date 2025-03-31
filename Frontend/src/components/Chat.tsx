@@ -4,13 +4,43 @@ import { useState } from "react";
 interface RoomProp {  
     Room: number[];
     _name: string;
+    wsRef: WebSocket | null;
 }
 
-function Chat({Room , _name}: RoomProp) {
+interface MessageProp {
+  my?: boolean;
+  name?: string;
+  roomId: number;
+  text: string;
+}
+
+function Chat({Room , _name , wsRef}: RoomProp) {
+
   const navigate = useNavigate();
-  const [RoomId, setRoomId] = useState<number>();
+  const [RoomId, setRoomId] = useState<number | null>(null);
+  const [message, setmessage] = useState<MessageProp []>([]);
+  const [sendMessage, setsendMessage] = useState<string>("");
   const handleAddClick = () => {
     navigate('/roomjoin')
+  }
+
+  if(wsRef != null) {
+    wsRef.onmessage = (e) => {  
+      const data = JSON.parse(e.data);
+      setmessage((pre)=>[...pre,data]);
+    }
+  }
+  
+  const handleSendButton = () => {
+    wsRef?.send(JSON.stringify({
+      type:"chat",
+      payload: {
+        roomId: RoomId,
+        name: _name,
+        text: sendMessage
+      }
+    }))
+    setsendMessage("");
   }
 
   return (
@@ -31,11 +61,11 @@ function Chat({Room , _name}: RoomProp) {
           </div>
           
           <div className="w-[100%] h-[577px] flex ">
-            <div className="w-[600px] h-[100%] bg-white flex flex-col items-center">
+            <div className="w-[600px] h-[100%] bg-white flex flex-col items-center overflow-y-scroll">
               {
-                Room.map((room)=>{
+                Room.map((room,index)=>{
                   return(
-                    <div className="w-[351px] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end " onClick={
+                    <div key={index} className="w-[351px] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end " onClick={
                       ()=> {
                         setRoomId(room)
                       }
@@ -47,30 +77,41 @@ function Chat({Room , _name}: RoomProp) {
               }
             </div>
             <div className="w-full">
-              <div className="w-full h-[526px]">
-                
-                <div>
-                <div className="bg-white flex flex-col w-fit min-w-[103px] text-[24px] ml-18 mt-10 pr-5 p-2 pl-5 rounded-br-3xl rounded-bl-3xl rounded-tr-3xl">
-                  <div className="text-[#FFAC59]">Kunal</div>
-                  <div>hiidshdssdgasgasfgsafgasdgasfdfh</div>
-                </div>
-                </div>
-                
-                <div className="flex justify-end">
-                <div className="flex flex-col w-fit min-w-[103px] text-[24px] mr-5 mt-10 pr-5 p-4 pl-5 rounded-br-3xl rounded-bl-3xl rounded-tl-3xl bg-[#B0C8E0]">
-                  <div>hiidshdssdgasgasfgsafgasdgasfdfh</div>
-                </div>
-                </div>
-                
+              <div className="w-full h-[526px] overflow-y-scroll scroll-[#3C496C]">
+               
+               {
+                message.map((e)=>{
+                  return (
+                    e.my ?
+                    RoomId == e.roomId &&
+                    <div className="flex justify-end">
+                    <div className="flex flex-col w-fit min-w-[103px] text-[24px] mr-5 mt-10 pr-5 p-4 pl-5 rounded-br-3xl rounded-bl-3xl rounded-tl-3xl bg-[#B0C8E0]">
+                    <div>{e.text}</div>
+                    </div>
+                    </div>  :
+                    RoomId == e.roomId &&
+                    <div>
+                    <div className="bg-white flex flex-col w-fit min-w-[103px] text-[24px] ml-18 mt-10 pr-5 p-2 pl-5 rounded-br-3xl rounded-bl-3xl rounded-tr-3xl">
+                      <div className="text-[#FFAC59]">{e.name}</div>
+                      <div>{e.text}</div>
+                    </div>
+                    </div>
+                  )
+                })
+               }
 
               </div>
 
               
 
               <div className="bg-white w-full h-[50px] border-1 border-[#B0C8E0] flex justify-between items-center rounded-[10px]">
-                <input type="text" placeholder="Send a Message" className="w-full border-none outline-none ml-8 h-full"/>
+                <input type="text" placeholder="Send a Message" className="w-full border-none outline-none ml-8 h-full" value={sendMessage} onChange={(e)=>{
+                  setsendMessage(e.target.value)
+                }}/>
 
-                <div className="mr-5 border-1 h-[30px] w-[72px] bg-[#3C496C] rounded-[10px] text-white flex justify-center pt-[1px] ">Send</div>  
+                <div className="mr-5 border-1 h-[30px] w-[72px] bg-[#3C496C] rounded-[10px] text-white flex justify-center pt-[1px] " onClick={()=>{
+                  handleSendButton()
+                }}>Send</div>  
               </div>
             </div>
           </div>

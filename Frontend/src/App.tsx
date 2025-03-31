@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -5,6 +6,7 @@ import Loading from "./components/Loading"
 import Register from "./components/Register";
 import RoomJoin from "./components/RoomJoin";
 import Chat from "./components/Chat";
+
 
 
 function App() {
@@ -44,7 +46,7 @@ function App() {
             <Route path="/" element={<Register setRoomOpt={setRoomOpt}/>} /> 
           }
           <Route path="/roomjoin" element={<RoomJoin roomOpt={roomOpt} wsRef={wsRef.current} setRoom={setRoom} _setName={setName}/>} />
-          <Route path="/chat" element={<Chat Room={Room} _name={name} />} />
+          <Route path="/chat" element={<Chat Room={Room} _name={name} wsRef={wsRef.current}/>} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -3,7 +3,22 @@
 @import "tailwindcss";
 
 
-@theme {
+:root {
     --font-Rubik_Vinyl: "Rubik Vinyl";
     --font-Russo_One: "Russo One";
+}
+
+body {
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+    
+      ::-webkit-scrollbar-thumb {
+        background-color: #3C496C;
+        border-radius: 2px;
+      }
+    
+      ::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
 }
