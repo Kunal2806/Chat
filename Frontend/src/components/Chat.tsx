@@ -80,17 +80,17 @@ function Chat({Room , _name , wsRef}: RoomProp) {
               <div className="w-full h-[526px] overflow-y-scroll scroll-[#3C496C]">
                
                {
-                message.map((e)=>{
+                message.map((e,index)=>{
                   return (
                     e.my ?
                     RoomId == e.roomId &&
-                    <div className="flex justify-end">
+                    <div key={index} className="flex justify-end">
                     <div className="flex flex-col w-fit min-w-[103px] text-[24px] mr-5 mt-10 pr-5 p-4 pl-5 rounded-br-3xl rounded-bl-3xl rounded-tl-3xl bg-[#B0C8E0]">
                     <div>{e.text}</div>
                     </div>
                     </div>  :
                     RoomId == e.roomId &&
-                    <div>
+                    <div key={index}>
                     <div className="bg-white flex flex-col w-fit min-w-[103px] text-[24px] ml-18 mt-10 pr-5 p-2 pl-5 rounded-br-3xl rounded-bl-3xl rounded-tr-3xl">
                       <div className="text-[#FFAC59]">{e.name}</div>
                       <div>{e.text}</div>
