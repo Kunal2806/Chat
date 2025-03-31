@@ -47,4 +47,3 @@ wss.on("connection",function(socket: WebSocket) {
     })
 
 })
-

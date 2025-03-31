@@ -21,8 +21,29 @@ function Chat({Room}: RoomProp) {
             </div>
           </div>
           
-          <div className="w-[100%] h-[577px] bg-white">
+          <div className="w-[100%] h-[577px] flex ">
+            <div className="w-[600px] h-[100%] bg-white flex flex-col items-center">
+              <div className="w-[351px] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end ">
+                <p className="text-[24px] mb-2 ml-3">Chat 1</p>
+              </div>
+              <div className="w-[351px] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end ">
+                <p className="text-[24px] mb-2 ml-3">Chat 2</p>
+              </div>
+              <div className="w-[351px] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end ">
+                <p className="text-[24px] mb-2 ml-3">Chat 3</p>
+              </div>
+            </div>
+            <div className="w-full flex items-end">
+              <div className="">
+                
+              </div>
 
+              <div className="bg-white w-full h-[50px] border-1 border-[#B0C8E0] flex justify-between items-center rounded-[10px]">
+                <input type="text" placeholder="Send a Message" className="w-full border-none outline-none ml-8 h-full"/>
+
+                <div className="mr-5 border-1 h-[30px] w-[72px] bg-[#3C496C] rounded-[10px] text-white flex justify-center pt-[1px] ">Send</div>  
+              </div>
+            </div>
           </div>
 
         </div>  
