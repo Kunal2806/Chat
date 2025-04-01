@@ -1,5 +1,5 @@
 ## Chat 
-A chat website that does not store any user data. All data is deleted when the user disconnects from the server.
+A chat website that does not store any user data.<br/> All data is deleted when the user disconnects from the server.
 
 ## Frontend Design (Figma)
 ![Frontend Design](https://github.com/user-attachments/assets/5e9e0b76-44e8-4a5e-b373-471327dadd0e)
@@ -14,6 +14,7 @@ A chat website that does not store any user data. All data is deleted when the u
     npm init -y
 
 2. Add TypeScript and WebSocket dependencies:
+    ```bash
     npm install typescript 
     npx tsc --init 
     npm install ws @types/ws
@@ -21,10 +22,12 @@ A chat website that does not store any user data. All data is deleted when the u
 ## Frontend Setup
 
 1. Create a new Vite project:
+   ```bash
     npm create vite@latest
     - framework: React
     - variant: TypeScript
-2. Install Tailwind Css
+3. Install Tailwind CSS
+   ```bash
     - npm install tailwindcss @tailwindcss/vite
 
 ## Demo
