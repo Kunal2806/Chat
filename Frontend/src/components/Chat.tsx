@@ -20,6 +20,8 @@ function Chat({Room , _name , wsRef}: RoomProp) {
   const [RoomId, setRoomId] = useState<number | null>(null);
   const [message, setmessage] = useState<MessageProp []>([]);
   const [sendMessage, setsendMessage] = useState<string>("");
+  const [toggle, settoggle] = useState(true);
+
   const handleAddClick = () => {
     navigate('/roomjoin')
   }
@@ -49,7 +51,7 @@ function Chat({Room , _name , wsRef}: RoomProp) {
         <div className="w-[95vw] h-[92vh]">
 
           <div className="w-[100%] h-[50px] flex">
-            <div className="w-[600px] bg-[#465687] flex justify-between items-center">
+            <div className="w-[300px] md:w-[600px] bg-[#465687] flex justify-between items-center">
               <p className="text-white text-2xl font-Russo_One ml-4">{_name}</p>
               <div className="rounded-full border-2 bg-white mr-4 " onClick={()=>{handleAddClick()}}>
                 <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="#75FB4C"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/></svg>
@@ -61,11 +63,15 @@ function Chat({Room , _name , wsRef}: RoomProp) {
           </div>
           
           <div className="w-[100%] h-[577px] flex ">
-            <div className="w-[600px] h-[100%] bg-white flex flex-col items-center overflow-y-scroll">
+
+            {
+              toggle ?
+              <div className="w-[600px] h-[100%] bg-white flex flex-col items-center overflow-y-scroll " >
+                <div className="flex w-[100%] justify-end items-end" onClick={()=>settoggle(false)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#465687"><path d="M440-280v-400L240-480l200 200Zm80 160h80v-720h-80v720Z"/></svg></div>
               {
                 Room.map((room,index)=>{
                   return(
-                    <div key={index} className="w-[351px] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end " onClick={
+                    <div key={index} className="w-[100%] h-[94px] border-b-1 border-dashed border-[#3C496C] flex items-end " onClick={
                       ()=> {
                         setRoomId(room)
                       }
@@ -75,9 +81,11 @@ function Chat({Room , _name , wsRef}: RoomProp) {
                   )
                 })
               }
-            </div>
+            </div> :
+            <div onClick={()=>settoggle(true)}> <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#465687"><path d="M360-120v-720h80v720h-80Zm160-160v-400l200 200-200 200Z"/></svg> </div>
+            }
             <div className="w-full">
-              <div className="w-full h-[526px] overflow-y-scroll scroll-[#3C496C]">
+              <div className="w-full h-[526px] overflow-y-scroll">
                
                {
                 message.map((e,index)=>{
