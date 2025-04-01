@@ -1,5 +1,5 @@
 ## Chat 
-A chat website that does not store any user data.<br/> All data is deleted when the user disconnects from the server.
+A chat website that does not store any type of user data.<br/> All data is deleted when the user disconnects from the server.
 
 ## Frontend Design (Figma)
 ![Frontend Design](https://github.com/user-attachments/assets/5e9e0b76-44e8-4a5e-b373-471327dadd0e)
